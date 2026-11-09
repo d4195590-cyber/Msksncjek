@@ -47,7 +47,7 @@ local quickConn = nil
 local quickTriggerConns = {}
 local quickCooldown = 0
 local quickCooldownTime = 3
-local quickRiseHeight = 15
+local quickRiseHeight = 14
 
 local playerCheckCache = {}
 local playerCheckTime = 0
@@ -458,7 +458,7 @@ local function run()
         if success then
             local hrp = getHrp()
             if hrp and on then
-                local upTarget = hrp.Position + Vector3.new(0, 15, 0)
+                local upTarget = hrp.Position + Vector3.new(0, 14, 0)
                 startMove(upTarget, speed, false)
                 if not waitMoveDone() then break end
             end
