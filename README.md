@@ -638,7 +638,7 @@ local sLbl = main:CreateLabel("Статус: OFF")
 local function upS(t) sLbl:SetText(t) end
 
 local tgl
-tgl = main:CreateToggle("Кража яиц", false, function(v)
+tgl = main:CreateToggle("Кража яиц (не советую использовать)", false, function(v)
     if v then
         local ok, err = start()
         if ok then
