@@ -48,7 +48,9 @@ local quickTriggerConns = {}
 local quickCooldown = 0
 local quickCooldownTime = 3
 local quickRiseHeight = 12
+local ragdollDelay = 1.3
 
+local ragdollStartTime = nil
 local playerCheckCache = {}
 local playerCheckTime = 0
 
@@ -62,6 +64,21 @@ local function getHum()
     local c = lp.Character
     if not c then return nil end
     return c:FindFirstChildOfClass("Humanoid")
+end
+
+local function isRagdolled()
+    local c = lp.Character
+    if not c then return false end
+    local hum = c:FindFirstChildOfClass("Humanoid")
+    if not hum then return false end
+
+    if hum.Health <= 0 then return true end
+    local state = hum:GetState()
+    if state == Enum.HumanoidStateType.Physics or state == Enum.HumanoidStateType.Ragdoll or state == Enum.HumanoidStateType.FallingDown then return true end
+    if hum.PlatformStand then return true end
+    if hum.WalkSpeed <= 0 and hum.JumpPower <= 0 then return true end
+
+    return false
 end
 
 local function getEggFolder()
@@ -187,6 +204,26 @@ local function onStepped(time, dt)
     if not movementActive() or not moveTarget then return end
     local hrp = getHrp()
     if not hrp then return end
+
+    if isRagdolled() then
+        if not ragdollStartTime then
+            ragdollStartTime = os.clock()
+        end
+        if os.clock() - ragdollStartTime >= ragdollDelay then
+            moveTarget = nil
+            isGoingToEgg = false
+            currentModel = nil
+            ragdollStartTime = nil
+            if linearVel then
+                pcall(function() linearVel.VectorVelocity = Vector3.zero end)
+            end
+            hrp.AssemblyLinearVelocity = Vector3.zero
+            destroyLinearVel()
+            return
+        end
+    else
+        ragdollStartTime = nil
+    end
 
     if isGoingToEgg and currentModel then
         local valid = currentModel.Parent ~= nil
@@ -458,7 +495,7 @@ local function run()
         if success then
             local hrp = getHrp()
             if hrp and on then
-                local upTarget = hrp.Position + Vector3.new(0, 12, 0)
+                local upTarget = hrp.Position + Vector3.new(0, quickRiseHeight, 0)
                 startMove(upTarget, speed, false)
                 if not waitMoveDone() then break end
             end
@@ -570,6 +607,7 @@ local function stop()
     moveSpeed = 16
     isGoingToEgg = false
     currentModel = nil
+    ragdollStartTime = nil
     knownEggs = {}
     knownPrompts = {}
     playerCheckCache = {}
@@ -671,4 +709,4 @@ tglQuick = main:CreateToggle("Добыть подобранное яйцо", fal
     end
 end)
 
-win:Notify("Nyxen Hub", "Egg Steal загружен ✅", "success", 4)
+win:Notify("Nyxen Hub", "Egg Steal загружен ✅ v 1.2", "success", 4)
