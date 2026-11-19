@@ -560,7 +560,7 @@ local function onQuickTriggered(prompt, player)
 		local hrp2 = getHrp()
 		if not hrp2 then return end
 
-		-- ИЗМЕНЕНО: Телепорт на высоту вместо подъёма
+		-- фикс 2
 		pcall(function()
 			hrp2.CFrame = CFrame.new(hrp2.Position + Vector3.new(0, quickRiseHeight, 0))
 			hrp2.AssemblyLinearVelocity = Vector3.zero
