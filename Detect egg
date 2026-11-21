@@ -47,7 +47,7 @@ local quickConn = nil
 local quickTriggerConns = {}
 local quickCooldown = 0
 local quickCooldownTime = 3
-local quickRiseHeight = 10
+local quickRiseHeight = 11
 local ragdollDelay = 1.3
 
 local ragdollStartTime = nil
