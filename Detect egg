@@ -37,7 +37,7 @@ local holdDuration = 5
 local checkInterval = 0.3
 local arriveDist = 3
 local playerRadius = 13
-local collectPoint = Vector3.new(8.7, 3.0, -13.7)
+local collectPoint = Vector3.new(8.7, 12.0, -13.7)
 local heightOffset = 2
 local promptTimeout = 10
 local promptRadius = 20
@@ -719,4 +719,4 @@ tglQuick = main:CreateToggle("Добыть подобранное яйцо", fal
 	end
 end)
 
-win:Notify("Nyxen Hub", "Egg Steal загружен ✅ v 1.3", "success", 4)
+win:Notify("Nyxen Hub", "Egg Steal загружен ✅ v 1.4", "success", 4)
